@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -120,10 +122,43 @@ def decompose_time_series(data, column, model='additive', freq=None):
     seasonal_decompose: Decomposition object.
     """
     try:
-        decomposition = seasonal_decompose(data[column], model=model, period=freq)
+        series = data[column].dropna()
+        n_obs = len(series)
+
+        if n_obs < 2:
+            raise ValueError(
+                f"Insufficient data points ({n_obs}) in column '{column}' for seasonal decomposition."
+            )
+
+        period = freq
+
+        def _fallback_period(base_period):
+            candidate = base_period if base_period is not None else series.shape[0] // 2
+            candidate = min(candidate, series.shape[0] // 2)
+            candidate = max(candidate, 2)
+            if candidate * 2 > series.shape[0]:
+                return None
+            return candidate
+
+        if period is None or period < 2 or n_obs < 2 * period:
+            fallback = _fallback_period(period)
+            if fallback is None:
+                raise ValueError(
+                    "Unable to determine a suitable seasonal period: "
+                    f"received freq={freq}, but only {n_obs} non-NaN observations are available."
+                )
+            if period is not None and fallback != period:
+                warnings.warn(
+                    "Provided period is too large for the available data. "
+                    f"Falling back to period={fallback}.",
+                    UserWarning,
+                )
+            period = fallback
+
+        decomposition = seasonal_decompose(series, model=model, period=period)
         decomposition.plot()
         plt.show()
         return decomposition
     except Exception as e:
         print(f"Error decomposing time series: {e}")
-        return None
+        raise

@@ -3,14 +3,24 @@ from jinja2 import Environment, FileSystemLoader
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
-def generate_statistical_report(data, report_path='statistical_report.html'):
+def _resolve_template_dir(template_dir: str = None) -> str:
+    """Return the directory that contains the report templates."""
+    if template_dir is not None:
+        return template_dir
+
+    return os.path.join(os.path.dirname(__file__), 'templates')
+
+
+def generate_statistical_report(data, report_path='statistical_report.html', template_dir=None):
     """
     Generate a statistical report with basic and advanced statistics.
 
     Parameters:
     data (pd.DataFrame): DataFrame containing the data.
     report_path (str): Path to save the generated report.
+    template_dir (str, optional): Directory containing the Jinja2 templates.
 
     Returns:
     None
@@ -31,7 +41,7 @@ def generate_statistical_report(data, report_path='statistical_report.html'):
         plt.close()
 
         # Szablon Jinja2
-        env = Environment(loader=FileSystemLoader('templates'))
+        env = Environment(loader=FileSystemLoader(_resolve_template_dir(template_dir)))
         template = env.get_template('statistical_report_template.html')
 
         # Renderowanie szablonu
@@ -49,7 +59,7 @@ def generate_statistical_report(data, report_path='statistical_report.html'):
     except Exception as e:
         print(f"Error generating statistical report: {e}")
 
-def generate_interpretation_report(data, model, X_test, y_test, report_path='interpretation_report.html'):
+def generate_interpretation_report(data, model, X_test, y_test, report_path='interpretation_report.html', template_dir=None):
     """
     Generate an interpretation report for model results.
 
@@ -59,6 +69,7 @@ def generate_interpretation_report(data, model, X_test, y_test, report_path='int
     X_test (pd.DataFrame): Test features.
     y_test (pd.Series): Test target variable.
     report_path (str): Path to save the generated report.
+    template_dir (str, optional): Directory containing the Jinja2 templates.
 
     Returns:
     None
@@ -68,13 +79,13 @@ def generate_interpretation_report(data, model, X_test, y_test, report_path='int
         y_pred = model.predict(X_test)
         evaluation_metrics = {
             'confusion_matrix': pd.DataFrame(confusion_matrix(y_test, y_pred)),
-            'precision': precision_score(y_test, y_pred, average='weighted'),
-            'recall': recall_score(y_test, y_pred, average='weighted'),
-            'f1_score': f1_score(y_test, y_pred, average='weighted')
+            'precision': precision_score(y_test, y_pred, average='weighted', zero_division=0),
+            'recall': recall_score(y_test, y_pred, average='weighted', zero_division=0),
+            'f1_score': f1_score(y_test, y_pred, average='weighted', zero_division=0)
         }
 
         # Szablon Jinja2
-        env = Environment(loader=FileSystemLoader('templates'))
+        env = Environment(loader=FileSystemLoader(_resolve_template_dir(template_dir)))
         template = env.get_template('interpretation_report_template.html')
 
         # Renderowanie szablonu
@@ -94,13 +105,14 @@ def generate_interpretation_report(data, model, X_test, y_test, report_path='int
     except Exception as e:
         print(f"Error generating interpretation report: {e}")
 
-def suggest_further_analysis(data, report_path='further_analysis_report.html'):
+def suggest_further_analysis(data, report_path='further_analysis_report.html', template_dir=None):
     """
     Generate a report with suggestions for further analysis.
 
     Parameters:
     data (pd.DataFrame): DataFrame containing the data.
     report_path (str): Path to save the generated report.
+    template_dir (str, optional): Directory containing the Jinja2 templates.
 
     Returns:
     None
@@ -115,7 +127,7 @@ def suggest_further_analysis(data, report_path='further_analysis_report.html'):
         ]
 
         # Szablon Jinja2
-        env = Environment(loader=FileSystemLoader('templates'))
+        env = Environment(loader=FileSystemLoader(_resolve_template_dir(template_dir)))
         template = env.get_template('further_analysis_template.html')
 
         # Renderowanie szablonu

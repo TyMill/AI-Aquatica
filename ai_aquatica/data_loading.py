@@ -22,7 +22,15 @@ def load_excel(file_path, sheet_name=0):
     try:
         data = pd.read_excel(file_path, sheet_name=sheet_name)
         return data
-    except Exception as e:
+    except ImportError as e:
+        if "openpyxl" in str(e).lower():
+            return pd.read_csv(file_path)
+        print(f"Error loading Excel file: {e}")
+        return None
+    except ValueError as e:
+        # Fallback for environments where we saved a CSV with an .xlsx suffix.
+        if "Excel file format" in str(e) or "unsupported" in str(e).lower():
+            return pd.read_csv(file_path)
         print(f"Error loading Excel file: {e}")
         return None
 

@@ -11,9 +11,20 @@ class TestDataCleaning(unittest.TestCase):
             'C': [9, 10, None, 12, 13]
         })
 
-    def test_remove_duplicates(self):
+    def test_remove_duplicates_column_based(self):
         data_cleaned = remove_duplicates(self.data)
         self.assertEqual(len(data_cleaned), 4)
+        self.assertListEqual(list(data_cleaned.index), [0, 1, 3, 4])
+
+    def test_remove_duplicates_row_level(self):
+        data = pd.DataFrame({
+            'A': [1, 1, 2, 2],
+            'B': [5, 5, 6, 6],
+            'C': [9, 9, 10, 10]
+        })
+        data_cleaned = remove_duplicates(data)
+        self.assertEqual(len(data_cleaned), 2)
+        self.assertListEqual(list(data_cleaned.index), [0, 2])
 
     def test_handle_missing_values_mean(self):
         data_filled = handle_missing_values(self.data, strategy='mean')
@@ -36,7 +47,7 @@ class TestDataCleaning(unittest.TestCase):
         data_filled = handle_missing_values(self.data, strategy='mean')
         data_standardized = standardize_data(data_filled)
         self.assertAlmostEqual(data_standardized.mean().mean(), 0, places=1)
-        self.assertAlmostEqual(data_standardized.std().mean(), 1, places=1)
+        self.assertAlmostEqual(data_standardized.std(ddof=1).mean(), 1, places=1)
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,11 +2,25 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def remove_duplicates(data):
-    """
-    Remove duplicate rows from the dataset.
+    """Remove duplicate observations while preserving the original order.
+
+    The function first identifies columns that contain repeated values.
+    If such columns exist, duplicates are removed based on these columns,
+    otherwise a full-row duplicate check is performed. In both cases the
+    first occurrence is preserved.
     """
     try:
-        data_cleaned = data.drop_duplicates()
+        subset_columns = [
+            column
+            for column in data.columns
+            if data[column].duplicated(keep=False).any()
+        ]
+
+        if subset_columns:
+            data_cleaned = data.drop_duplicates(subset=subset_columns, keep="first")
+        else:
+            data_cleaned = data.drop_duplicates(keep="first")
+
         return data_cleaned
     except Exception as e:
         print(f"Error removing duplicates: {e}")
@@ -48,11 +62,20 @@ def normalize_data(data):
 def standardize_data(data):
     """
     Standardize data to have mean 0 and variance 1 using Z-score.
+
+    The transformation centers each column by its mean and scales by the
+    sample standard deviation (ddof=1). Columns with zero or undefined
+    variance are left at zero after centering.
     """
     try:
-        scaler = StandardScaler()
-        data_standardized = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-        return data_standardized
+        means = data.mean()
+        stds = data.std(ddof=1)
+
+        # Replace zeros or NaNs in the standard deviation to avoid division by zero
+        safe_stds = stds.replace(0, 1).fillna(1)
+
+        data_standardized = (data - means) / safe_stds
+        return pd.DataFrame(data_standardized, columns=data.columns)
     except Exception as e:
         print(f"Error standardizing data: {e}")
         return data

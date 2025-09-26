@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interpretation Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        h1, h2 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+        th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: center; }
+        th { background-color: #f5f5f5; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .metric { background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center; }
+        .metric span { display: block; font-size: 1.4rem; font-weight: bold; color: #16a085; }
+    </style>
+</head>
+<body>
+    <h1>Model Interpretation Report</h1>
+
+    <div class="metric-grid">
+        <div class="metric">
+            Precision
+            <span>{{ precision | round(4) }}</span>
+        </div>
+        <div class="metric">
+            Recall
+            <span>{{ recall | round(4) }}</span>
+        </div>
+        <div class="metric">
+            F1 Score
+            <span>{{ f1_score | round(4) }}</span>
+        </div>
+    </div>
+
+    <h2>Confusion Matrix</h2>
+    {{ confusion_matrix | safe }}
+</body>
+</html>

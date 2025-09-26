@@ -1,0 +1,1 @@
+recursive-include ai_aquatica/templates *.html

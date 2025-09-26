@@ -17,11 +17,19 @@ def normalize_data(data):
 def standardize_data(data):
     """
     Standardize data to have mean 0 and variance 1 using Z-score.
+
+    The transformation centers by the column means and scales by the sample
+    standard deviation (ddof=1). Columns with zero or undefined variance are
+    returned as zeros after centering.
     """
     try:
-        scaler = StandardScaler()
-        data_standardized = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-        return data_standardized
+        means = data.mean()
+        stds = data.std(ddof=1)
+
+        safe_stds = stds.replace(0, 1).fillna(1)
+
+        data_standardized = (data - means) / safe_stds
+        return pd.DataFrame(data_standardized, columns=data.columns)
     except Exception as e:
         print(f"Error standardizing data: {e}")
         return data

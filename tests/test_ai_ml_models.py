@@ -1,6 +1,7 @@
 import unittest
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import train_test_split
 from ai_aquatica.ml_analysis import (
     train_linear_regression,
     train_logistic_regression,

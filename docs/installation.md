@@ -14,7 +14,7 @@ AI-Aquatica is a Python library for water quality data analysis using modern AI 
 ## 🧪 Recommended (optional)
 
 - Jupyter Notebook or JupyterLab
-- plotly (for interactive visualizations)
+- Optional extras: TensorFlow for deep-learning utilities, Plotly for interactive charts
 
 ---
 
@@ -24,6 +24,19 @@ AI-Aquatica is a Python library for water quality data analysis using modern AI 
 pip install ai-aquatica
 ```
 
+Optional extras bundle the heavier dependencies so you can decide what to install:
+
+```bash
+# Autoencoders, GANs and other TensorFlow features
+pip install "ai-aquatica[deep_learning]"
+
+# Interactive Plotly visualisations
+pip install "ai-aquatica[interactive]"
+
+# Everything at once
+pip install "ai-aquatica[all]"
+```
+
 ---
 
 ## 🧬 Clone from GitHub (development version)
@@ -31,17 +44,7 @@ pip install ai-aquatica
 ```bash
 git clone https://github.com/TyMill/AI-Aquatica.git
 cd AI-Aquatica
-pip install -e .
-```
-
----
-
-## 📌 Extras
-
-If you need additional tools like visualization, autoencoders or GANs, install extra dependencies manually:
-
-```bash
-pip install scikit-learn matplotlib seaborn tensorflow plotly jinja2
+pip install -e .[all]
 ```
 
 ---

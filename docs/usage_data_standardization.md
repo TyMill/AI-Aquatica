@@ -1,13 +1,13 @@
 # 📏 Usage – Data Standardization (AI-Aquatica)
 
-This guide demonstrates how to use the `data_standarization` module to transform your data for better performance in machine learning models.
+This guide demonstrates how to use the `data_standardization` module to transform your data for better performance in machine learning models.
 
 ---
 
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.data_standarization import (
+from ai_aquatica.data_standardization import (
     normalize_data,
     standardize_data,
     log_transform,

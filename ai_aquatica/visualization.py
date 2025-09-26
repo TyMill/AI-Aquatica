@@ -1,3 +1,6 @@
+import importlib
+import warnings
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -178,7 +181,16 @@ def plot_interactive_bubble(data, x_column, y_column, size_column, hover_column)
     None
     """
     try:
-        import plotly.express as px
+        try:
+            px = importlib.import_module("plotly.express")
+        except ImportError:
+            warnings.warn(
+                "Plotly is not installed. Install it with `pip install ai-aquatica[interactive]` "
+                "to enable interactive visualizations.",
+                RuntimeWarning,
+            )
+            return
+
         fig = px.scatter(data, x=x_column, y=y_column, size=size_column, hover_name=hover_column, size_max=60)
         fig.show()
     except Exception as e:

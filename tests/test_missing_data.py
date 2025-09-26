@@ -6,7 +6,8 @@ from ai_aquatica.missing_data import (
     fill_missing_with_mode,
     fill_missing_with_knn,
     fill_missing_with_regression,
-    fill_missing_with_autoencoder
+    fill_missing_with_autoencoder,
+    TENSORFLOW_AVAILABLE,
 )
 
 class TestMissingData(unittest.TestCase):
@@ -41,6 +42,7 @@ class TestMissingData(unittest.TestCase):
         data_filled = fill_missing_with_regression(self.data)
         self.assertFalse(data_filled.isnull().values.any())
 
+    @unittest.skipUnless(TENSORFLOW_AVAILABLE, "TensorFlow not available")
     def test_fill_missing_with_autoencoder(self):
         data_filled = fill_missing_with_autoencoder(self.data)
         self.assertFalse(data_filled.isnull().values.any())

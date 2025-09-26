@@ -5,6 +5,9 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15096947.svg)](https://doi.org/10.5281/zenodo.15096947)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://tymill.github.io/AI-Aquatica/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/ai-aquatica?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/ai-aquatica)
+[![CI](https://github.com/TyMill/energicast/actions/workflows/ci.yml/badge.svg)](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/TyMill/energicast)](https://github.com/TyMill/ai-aquatica/releases)
 
 **AI-Aquatica** is a comprehensive open-source Python library designed to analyze water quality data using advanced AI and statistical tools.  
 It facilitates preprocessing, modeling, visualization, and reporting of hydrochemical datasets with minimal effort – empowering researchers and professionals in hydrology, ecology, and environmental monitoring.
@@ -42,12 +45,25 @@ It facilitates preprocessing, modeling, visualization, and reporting of hydroche
 pip install ai-aquatica
 ```
 
+Optional extras provide deep-learning and interactive visualization support:
+
+```bash
+# Install TensorFlow-powered utilities
+pip install "ai-aquatica[deep_learning]"
+
+# Install Plotly-based interactive charts
+pip install "ai-aquatica[interactive]"
+
+# Or grab everything
+pip install "ai-aquatica[all]"
+```
+
 Or from GitHub:
 
 ```bash
 git clone https://github.com/TyMill/AI-Aquatica.git
 cd AI-Aquatica
-pip install -e .
+pip install -e .[all]
 ```
 
 > Full guide: [installation.md](https://tymill.github.io/AI-Aquatica/installation)
@@ -71,7 +87,7 @@ Explore individual usage examples:
 ## 💡 Quick Start Example
 
 ```python
-from ai_aquatica.ai_models import train_classification_model
+from ai_aquatica.ml_analysis import train_classification_model
 import pandas as pd
 import numpy as np
 
@@ -85,9 +101,44 @@ df = pd.DataFrame({
 X = df[['NO3', 'pH']]
 y = df['target']
 
+# Train a random forest classification model using AI-Aquatica's helper
 model = train_classification_model(X, y, model_type='random_forest')
 print("Model trained successfully.")
 ```
+
+### Report Generation Templates
+
+AI-Aquatica ships with ready-to-use [Jinja2](https://jinja.palletsprojects.com/) templates stored in
+`ai_aquatica/templates`. By default the report utilities render these files to create:
+
+- `statistical_report.html` (plus an accompanying `heatmap.png` chart),
+- `interpretation_report.html`,
+- `further_analysis_report.html`.
+
+The templates are available immediately after installation, but if you installed only the
+minimal dependencies make sure `jinja2` is present:
+
+```bash
+pip install jinja2
+```
+
+You can point the report functions to your own template directory by passing the `template_dir`
+parameter. The directory should contain files named like the bundled templates so the engine can
+find them.
+
+```python
+from ai_aquatica.report_generation import generate_statistical_report
+
+custom_templates = "/path/to/my/templates"  # folder with statistical_report_template.html, etc.
+generate_statistical_report(
+    data=df,
+    report_path="reports/wq_stat_report.html",
+    template_dir=custom_templates,
+)
+```
+
+> Need more control? Copy the files from `ai_aquatica/templates`, modify them, and point
+> `template_dir` to the folder containing your customized versions.
 
 ---
 

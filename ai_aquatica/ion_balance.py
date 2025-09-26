@@ -52,15 +52,30 @@ def correct_ion_discrepancies(data, cations, anions):
     pd.DataFrame: DataFrame with corrected ion concentrations.
     """
     try:
+        if not cations or not anions:
+            return data
+
         discrepancies = data['Cations_Sum'] - data['Anions_Sum']
-        adjustment_factor = discrepancies / len(cations)
-        
-        for cation in cations:
-            data[cation] -= adjustment_factor / len(cations)
-        
-        for anion in anions:
-            data[anion] += adjustment_factor / len(anions)
-        
+
+        cation_adjustment = discrepancies / (2 * len(cations))
+        anion_adjustment = discrepancies / (2 * len(anions))
+
+        data[cations] = data[cations].sub(cation_adjustment, axis=0)
+        data[anions] = data[anions].add(anion_adjustment, axis=0)
+
+        data['Cations_Sum'] = data[cations].sum(axis=1)
+        data['Anions_Sum'] = data[anions].sum(axis=1)
+
+        total = data['Cations_Sum'] + data['Anions_Sum']
+        ion_balance = pd.Series(0.0, index=data.index)
+        non_zero_total = total != 0
+        ion_balance.loc[non_zero_total] = (
+            (data.loc[non_zero_total, 'Cations_Sum'] - data.loc[non_zero_total, 'Anions_Sum'])
+            / total.loc[non_zero_total]
+            * 100
+        )
+        data['Ion_Balance'] = ion_balance
+
         return data
     except Exception as e:
         print(f"Error correcting ion discrepancies: {e}")

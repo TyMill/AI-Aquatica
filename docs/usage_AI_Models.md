@@ -1,13 +1,13 @@
 # 📘 Usage – AI Models (AI-Aquatica)
 
-This guide shows how to use the AI/ML functionalities in the `ai_models` module of the AI-Aquatica library.
+This guide shows how to use the AI/ML functionalities in the `ml_analysis` module of the AI-Aquatica library.
 
 ---
 
 ## 1. 🔧 Importing
 
 ```python
-from ai_aquatica.ai_models import (
+from ai_aquatica.ml_analysis import (
     train_linear_regression,
     train_logistic_regression,
     train_classification_model,
@@ -96,4 +96,4 @@ synthetic.head()
 
 ## 🧠 Tip
 
-Use these tools in combination with `ai_aquatica.preprocessing` and `ai_aquatica.visualization` for full pipelines!
+Use these tools in combination with preprocessing utilities such as `ai_aquatica.data_cleaning` or `ai_aquatica.data_standardization`, along with `ai_aquatica.visualization`, for full pipelines!

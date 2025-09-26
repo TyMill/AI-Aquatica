@@ -1,3 +1,5 @@
+import importlib
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -14,8 +16,36 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-import tensorflow as tf
-from tensorflow.keras import layers, models
+
+
+def _ensure_tensorflow_available():
+    if not TENSORFLOW_AVAILABLE:
+        raise ImportError(
+            "TensorFlow is required for deep-learning utilities. "
+            "Install it with `pip install ai-aquatica[deep_learning]`."
+        )
+
+try:  # pragma: no cover - validated in tests simulating absence
+    tensorflow_module = importlib.import_module("tensorflow")
+    keras_layers = importlib.import_module("tensorflow.keras.layers")
+    keras_models = importlib.import_module("tensorflow.keras.models")
+    layers = importlib.import_module("tensorflow.keras.layers")
+    models = importlib.import_module("tensorflow.keras.models")
+    TENSORFLOW_AVAILABLE = True
+except Exception:
+    tensorflow_module = None
+    TENSORFLOW_AVAILABLE = False
+
+    class _TensorFlowProxy:
+        """Lightweight proxy that guides users to install TensorFlow."""
+
+        def __getattr__(self, item):
+            raise ImportError(
+                "TensorFlow is required for deep-learning utilities. "
+                "Install it with `pip install ai-aquatica[deep_learning]`."
+            )
+
+    layers = models = _TensorFlowProxy()
 
 # Regresja
 
@@ -104,9 +134,9 @@ def evaluate_classification_model(model, X_test, y_test):
     try:
         y_pred = model.predict(X_test)
         cm = confusion_matrix(y_test, y_pred)
-        precision = precision_score(y_test, y_pred, average='weighted')
-        recall = recall_score(y_test, y_pred, average='weighted')
-        f1 = f1_score(y_test, y_pred, average='weighted')
+        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
         
         return {
             'confusion_matrix': cm,
@@ -134,7 +164,7 @@ def perform_clustering(X, n_clusters=3, algorithm='kmeans'):
     """
     try:
         if algorithm == 'kmeans':
-            model = KMeans(n_clusters=n_clusters)
+            model = KMeans(n_clusters=n_clusters, n_init="auto")
         elif algorithm == 'dbscan':
             model = DBSCAN()
         else:
@@ -202,6 +232,7 @@ def detect_anomalies(X, method='isolation_forest'):
 # Generowanie Danych
 
 def build_gan(generator, discriminator):
+    _ensure_tensorflow_available()
     discriminator.compile(optimizer='adam', loss='binary_crossentropy')
     discriminator.trainable = False
     gan_input = layers.Input(shape=(generator.input_shape[1],))
@@ -212,6 +243,7 @@ def build_gan(generator, discriminator):
     return gan
 
 def build_generator(input_dim, output_dim):
+    _ensure_tensorflow_available()
     model = models.Sequential()
     model.add(layers.Dense(128, activation='relu', input_dim=input_dim))
     model.add(layers.Dense(256, activation='relu'))
@@ -220,6 +252,7 @@ def build_generator(input_dim, output_dim):
     return model
 
 def build_discriminator(input_dim):
+    _ensure_tensorflow_available()
     model = models.Sequential()
     model.add(layers.Dense(512, activation='relu', input_dim=input_dim))
     model.add(layers.Dense(256, activation='relu'))
@@ -238,6 +271,8 @@ def generate_synthetic_data(X, model_type='gan', epochs=100):
     Returns:
     pd.DataFrame: Synthetic data.
     """
+    _ensure_tensorflow_available()
+
     try:
         if model_type == 'gan':
             input_dim = X.shape[1]
@@ -277,6 +312,9 @@ def generate_synthetic_data(X, model_type='gan', epochs=100):
 
         else:
             raise ValueError("Currently, only 'gan' model_type is supported.")
+    except ImportError:
+        # Surface ImportError so that callers understand TensorFlow is required.
+        raise
     except Exception as e:
         print(f"Error generating synthetic data: {e}")
         return pd.DataFrame()
