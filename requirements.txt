@@ -4,11 +4,5 @@ scikit-learn
 matplotlib
 seaborn
 jinja2
-sqlalchemy
-pymongo
-requests
 scipy
 statsmodels
-tensorflow
-plotly
-pytest

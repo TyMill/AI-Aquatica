@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from ai_aquatica.data_cleaning import remove_duplicates, handle_missing_values, normalize_data, standardize_data
+from ai_aquatica.preprocessing.cleaning import remove_duplicates, handle_missing_values, normalize_data, standardize_data
 
 class TestDataCleaning(unittest.TestCase):
 

@@ -7,7 +7,7 @@ This guide presents how to use the `visualization` module to create basic and ad
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.visualization import (
+from ai_aquatica.visualization.plots import (
     plot_line,
     plot_bar,
     plot_pie,

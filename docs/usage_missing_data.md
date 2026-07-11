@@ -7,7 +7,7 @@ This guide demonstrates multiple strategies for handling missing values in envir
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.missing_data import (
+from ai_aquatica.preprocessing.missing import (
     fill_missing_with_mean,
     fill_missing_with_median,
     fill_missing_with_mode,

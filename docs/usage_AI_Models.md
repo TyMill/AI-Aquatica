@@ -7,7 +7,7 @@ This guide shows how to use the AI/ML functionalities in the `ml_analysis` modul
 ## 1. 🔧 Importing
 
 ```python
-from ai_aquatica.ml_analysis import (
+from ai_aquatica.modeling import (
     train_linear_regression,
     train_logistic_regression,
     train_classification_model,
@@ -96,4 +96,4 @@ synthetic.head()
 
 ## 🧠 Tip
 
-Use these tools in combination with preprocessing utilities such as `ai_aquatica.data_cleaning` or `ai_aquatica.data_standardization`, along with `ai_aquatica.visualization`, for full pipelines!
+Use these tools in combination with preprocessing utilities such as `ai_aquatica.preprocessing.cleaning` or `ai_aquatica.preprocessing.transformations`, along with `ai_aquatica.visualization.plots`, for full pipelines!

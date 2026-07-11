@@ -7,7 +7,7 @@ This guide demonstrates how to use the `data_standardization` module to transfor
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.data_standardization import (
+from ai_aquatica.preprocessing.transformations import (
     normalize_data,
     standardize_data,
     log_transform,

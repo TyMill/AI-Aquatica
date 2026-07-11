@@ -7,7 +7,7 @@ This guide demonstrates how to calculate ion balance, identify potential chemica
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.ion_balance import (
+from ai_aquatica.hydrochemistry.legacy import (
     calculate_ion_balance,
     identify_potential_errors,
     correct_ion_discrepancies

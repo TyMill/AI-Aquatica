@@ -7,7 +7,7 @@ This guide demonstrates how to use the `data_cleaning` module to prepare and cle
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.data_cleaning import (
+from ai_aquatica.preprocessing.cleaning import (
     remove_duplicates,
     handle_missing_values,
     normalize_data,

@@ -1,1 +1,15 @@
-recursive-include ai_aquatica/templates *.html
+include README.md
+include LICENSE
+include CITATION.cff
+include codemeta.json
+include CHANGELOG.md
+include CONTRIBUTING.md
+include requirements.txt
+recursive-include docs *.md
+recursive-include examples *.py
+recursive-include tests *.py
+
+recursive-include examples *.csv
+recursive-include examples *.md
+recursive-include src/ai_aquatica/datasets/data *.csv
+recursive-include src/ai_aquatica/reporting/templates *.html

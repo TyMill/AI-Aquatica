@@ -1,6 +1,6 @@
 """Re-export plotting helpers for convenient access."""
 
-from ai_aquatica.visualization import (
+from ai_aquatica.visualization.plots import (
     plot_line,
     plot_bar,
     plot_pie,

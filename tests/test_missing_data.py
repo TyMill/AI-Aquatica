@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from ai_aquatica.missing_data import (
+from ai_aquatica.preprocessing.missing import (
     fill_missing_with_mean,
     fill_missing_with_median,
     fill_missing_with_mode,

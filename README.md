@@ -5,166 +5,244 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15096947.svg)](https://doi.org/10.5281/zenodo.15096947)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://tymill.github.io/AI-Aquatica/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/ai-aquatica?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/ai-aquatica)
-[![CI](https://github.com/TyMill/energicast/actions/workflows/ci.yml/badge.svg)](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/TyMill/energicast)](https://github.com/TyMill/ai-aquatica/releases)
+[![CI](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml/badge.svg)](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml)
 
-**AI-Aquatica** is a comprehensive open-source Python library designed to analyze water quality data using advanced AI and statistical tools.  
-It facilitates preprocessing, modeling, visualization, and reporting of hydrochemical datasets with minimal effort – empowering researchers and professionals in hydrology, ecology, and environmental monitoring.
+**AI-Aquatica** is an open-source Python library for reproducible water-quality analysis with statistical, hydrochemical, machine-learning, visualization and HTML-reporting tools.
 
----
-
-## ✨ Features
-
-- ✅ **Data Import**: Load datasets from CSV, Excel, JSON, SQL, NoSQL, and APIs.
-- 🧼 **Data Cleaning**: Remove duplicates and handle missing values via multiple strategies.
-- 📏 **Data Standardization**: Normalize and standardize data (Z-score, MinMax, log, sqrt, Box-Cox).
-- 🧠 **Missing Data Imputation**: Fill gaps with:
-  - Mean, Median, Mode
-  - KNN Imputer
-  - Regression Imputer
-  - Autoencoder Neural Network
-- ⚖️ **Ion Balance**: Detect chemical inconsistencies and auto-correct based on ionic ratios.
-- 📊 **Statistical Analysis**: Get descriptive statistics, correlation matrices, ANOVA, time series decomposition.
-- 🤖 **AI/ML Modeling**:
-  - Regression & Classification (Logistic, SVM, Tree, RF)
-  - Clustering (KMeans, DBSCAN)
-  - Anomaly Detection (LOF, Isolation Forest)
-  - Synthetic Data (GAN-based generation)
-- 📈 **Visualization**:
-  - Basic: Line, Bar, Pie, Scatter, Heatmaps
-  - Advanced: PCA, t-SNE, Interactive Bubble Charts
-- 📝 **Report Generation**:
-  - Automatic HTML reports (statistics, ML evaluation, recommendations)
+The project is designed for researchers, students and environmental analysts working with tabular datasets from rivers, lakes, reservoirs, coastal waters and urban aquatic systems. It provides both a backward-compatible functional API and a new publication-oriented pipeline API for complete workflows.
 
 ---
 
-## 🛠 Installation
+## Why AI-Aquatica?
+
+Water-quality analysis often combines repeated steps: loading monitoring data, inspecting missing values, checking hydrochemical consistency, standardizing variables, running exploratory statistics, training models and preparing reports. In many projects these steps are implemented as separate notebooks or ad hoc scripts.
+
+AI-Aquatica organizes these steps into a reusable Python package while keeping the workflow transparent and inspectable.
+
+---
+
+## Main features
+
+- **Core workflow API**: `WaterQualityDataset`, `WaterQualityPipeline`, and typed result containers.
+- **Data import**: CSV, Excel, JSON, SQL, NoSQL and API helpers.
+- **Preprocessing**: missing-value handling, standardization, normalization and transformations.
+- **Hydrochemistry**: charge/ion balance diagnostics with `mg/L` to `meq/L` conversion and quality-control flags.
+- **Exploratory analysis**: descriptive statistics, correlation analysis, ANOVA and time-series decomposition.
+- **Machine learning**: regression, classification, clustering, anomaly detection, PCA and optional deep-learning utilities.
+- **Visualization**: static exploratory plots and optional interactive Plotly charts.
+- **Reporting**: standalone HTML reports with dataset diagnostics, figures, model outputs and ion-balance summaries.
+- **Example data**: bundled deterministic synthetic water-quality dataset for tutorials and reproducibility checks.
+
+---
+
+
+## Real CSV import and hydrochemical quality control
+
+AI-Aquatica can load monitoring datasets exported as European CSV files with semicolon separators, decimal commas and legacy encodings:
+
+```python
+from ai_aquatica.io import load_water_quality_csv
+from ai_aquatica.core import WaterQualityPipeline
+
+data = load_water_quality_csv("water_quality.csv")
+
+pipeline = (
+    WaterQualityPipeline.from_dataframe(data)
+    .describe()
+    .ion_balance_from_alkalinity(
+        cations=["Ca", "Mg", "NH4"],
+        anions=["Cl", "SO4", "NO3", "NO2"],
+        alkalinity_col="Alkalinity",
+        alkalinity_units="mg_CaCO3_L",
+        threshold=10,
+    )
+)
+
+pipeline.export_html_report("ai_aquatica_report.html")
+```
+
+The HTML report contains dataset diagnostics, missingness, descriptive statistics, correlation structure and a hydrochemical ion-balance quality-control section.
+
+## Installation
 
 ```bash
 pip install ai-aquatica
 ```
 
-Optional extras provide deep-learning and interactive visualization support:
+Optional extras:
 
 ```bash
-# Install TensorFlow-powered utilities
-pip install "ai-aquatica[deep_learning]"
-
-# Install Plotly-based interactive charts
-pip install "ai-aquatica[interactive]"
-
-# Or grab everything
-pip install "ai-aquatica[all]"
+pip install "ai-aquatica[interactive]"     # Plotly charts
+pip install "ai-aquatica[deep_learning]"   # TensorFlow utilities
+pip install "ai-aquatica[database]"        # SQL support
+pip install "ai-aquatica[nosql]"           # MongoDB support
+pip install "ai-aquatica[all]"             # all optional dependencies
 ```
 
-Or from GitHub:
+Development installation:
 
 ```bash
 git clone https://github.com/TyMill/AI-Aquatica.git
 cd AI-Aquatica
-pip install -e .[all]
+pip install -e ".[testing,interactive]"
+python -m pytest
 ```
 
-> Full guide: [installation.md](https://tymill.github.io/AI-Aquatica/installation)
-
 ---
 
-## 📘 Documentation
-
-Read the full documentation on **GitHub Pages**:  
-👉 [https://tymill.github.io/AI-Aquatica/](https://tymill.github.io/AI-Aquatica/)
-
-Explore individual usage examples:
-- `usage_data_cleaning.md`
-- `usage_data_loading.md`
-- `usage_missing_data.md`
-- `usage_statistical_analysis.md`
-- ... and more!
-
----
-
-## 💡 Quick Start Example
+## Quick start: professional pipeline
 
 ```python
-from ai_aquatica.ml_analysis import train_classification_model
-import pandas as pd
-import numpy as np
+from ai_aquatica.core import WaterQualityPipeline
+from ai_aquatica.datasets import load_example_dataset
 
-# Create mock dataset
-df = pd.DataFrame({
-    'NO3': np.random.rand(100),
-    'pH': np.random.rand(100),
-    'target': np.random.randint(0, 2, 100)
-})
+# Load bundled example data
+data = load_example_dataset()
 
-X = df[['NO3', 'pH']]
-y = df['target']
+features = [
+    "temperature",
+    "pH",
+    "conductivity",
+    "dissolved_oxygen",
+    "nitrate",
+    "phosphate",
+    "chlorophyll_a",
+]
 
-# Train a random forest classification model using AI-Aquatica's helper
-model = train_classification_model(X, y, model_type='random_forest')
-print("Model trained successfully.")
+pipeline = (
+    WaterQualityPipeline.from_dataframe(data)
+    .describe()
+    .ion_balance(
+        cations=["Ca", "Mg", "Na", "K"],
+        anions=["HCO3", "Cl", "SO4"],
+        units="mg/L",
+        threshold=5.0,
+    )
+    .select_features(features, target="water_quality_class")
+    .impute(strategy="median")
+    .scale()
+    .pca(n_components=2)
+    .train_random_forest(task="classification")
+)
+
+pipeline.export_html_report("ai_aquatica_report.html")
 ```
 
-### Report Generation Templates
-
-AI-Aquatica ships with ready-to-use [Jinja2](https://jinja.palletsprojects.com/) templates stored in
-`ai_aquatica/templates`. By default the report utilities render these files to create:
-
-- `statistical_report.html` (plus an accompanying `heatmap.png` chart),
-- `interpretation_report.html`,
-- `further_analysis_report.html`.
-
-The templates are available immediately after installation, but if you installed only the
-minimal dependencies make sure `jinja2` is present:
+Run the full SoftwareX-style reproducibility example:
 
 ```bash
-pip install jinja2
+python examples/softwarex_full_workflow.py
+python examples/real_dataset_workflow.py --output outputs/real_dataset
 ```
 
-You can point the report functions to your own template directory by passing the `template_dir`
-parameter. The directory should contain files named like the bundled templates so the engine can
-find them.
+Outputs are written to:
+
+```text
+outputs/softwarex_example/ai_aquatica_report.html
+outputs/softwarex_example/processed_water_quality.csv
+```
+
+---
+
+## Hydrochemical ion balance
+
+AI-Aquatica includes a domain-specific charge-balance module for chemical quality control.
 
 ```python
-from ai_aquatica.report_generation import generate_statistical_report
+from ai_aquatica.datasets import load_example_dataset
+from ai_aquatica.hydrochemistry import IonBalanceConfig, calculate_charge_balance
 
-custom_templates = "/path/to/my/templates"  # folder with statistical_report_template.html, etc.
-generate_statistical_report(
-    data=df,
-    report_path="reports/wq_stat_report.html",
-    template_dir=custom_templates,
+water = load_example_dataset()
+config = IonBalanceConfig(
+    cations=["Ca", "Mg", "Na", "K"],
+    anions=["HCO3", "Cl", "SO4"],
+    units="mg/L",
+    threshold=5.0,
 )
+
+checked = calculate_charge_balance(water, config)
+print(checked[["Ion_Balance", "Potential_Error", "Ion_Balance_Status"]].head())
 ```
 
-> Need more control? Copy the files from `ai_aquatica/templates`, modify them, and point
-> `template_dir` to the folder containing your customized versions.
+The module converts mg/L concentrations to milliequivalents per litre using an equivalent-weight catalogue and reports charge-balance error in percent. Diagnostic correction utilities are provided for sensitivity analysis; they should not replace laboratory quality-control procedures.
 
 ---
 
-## 🤝 Contributing
+## HTML reports
 
-Contributions are welcome! Please feel free to fork the repo and submit a pull request.  
-We especially welcome:
-- New preprocessing or AI models
-- Example notebooks / visual dashboards
-- Dataset integrations
+```python
+from ai_aquatica.datasets import load_example_dataset
+from ai_aquatica.reporting import generate_water_quality_report
 
----
+data = load_example_dataset()
+generate_water_quality_report(data, "water_quality_report.html")
+```
 
-## 📄 License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+Generated reports are standalone HTML files containing dataset preview, missingness profile, descriptive statistics, correlation figure and optional pipeline outputs.
 
 ---
 
-## 🙏 Acknowledgments
+## Package structure
 
-Special thanks to:
-- Open-source contributors
-- Environmental data science community
-- University of Szczecin & BNP Paribas for ongoing support
+```text
+ai_aquatica/
+  core/              # dataset container, pipeline and result objects
+  hydrochemistry/    # ion/charge balance and water chemistry quality control
+  reporting/         # standalone HTML reports
+  datasets/          # bundled reproducible example data
+  ...                # backward-compatible functional modules
+```
+
+The original functional modules remain available for existing notebooks and scripts.
 
 ---
 
-📫 Questions? Suggestions? Open an issue or email the maintainer.
+## Reproducibility for SoftwareX review
+
+This repository includes publication-oriented metadata and reproducibility assets:
+
+- `CITATION.cff`
+- `codemeta.json`
+- `CONTRIBUTING.md`
+- `CHANGELOG.md`
+- `docs/softwarex_reproducibility.md`
+- `docs/softwarex_architecture.md`
+- `examples/softwarex_full_workflow.py`
+- bundled example dataset in `src/ai_aquatica/datasets/data/`
+- `examples/real_dataset_workflow.py` with bundled real monitoring CSV file in `examples/data/water_quality.csv`
+
+Validation commands:
+
+```bash
+python -m pip install -e ".[testing,interactive]"
+python -m pytest
+python -m compileall src/ai_aquatica examples
+python examples/softwarex_full_workflow.py
+python examples/real_dataset_workflow.py --output outputs/real_dataset
+```
+
+Current validation status for the SoftwareX-preparation branch:
+
+```text
+61 passed, 1 skipped, 3 subtests passed
+```
+
+The skipped test concerns TensorFlow-based imputation when TensorFlow is not installed. TensorFlow is an optional dependency.
+
+---
+
+## Citation
+
+Please cite the archived software release and/or the SoftwareX article once published. See `CITATION.cff` for machine-readable citation metadata.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please see `CONTRIBUTING.md` for development setup, testing and pull-request guidance.

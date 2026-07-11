@@ -23,22 +23,22 @@ def test_public_api_subset_is_accessible_and_callable():
         attr = getattr(aa, name)
         assert callable(attr), f"{name} should be callable"
 
-    # ``import_csv`` is a thin wrapper around ``ai_aquatica.data_loading.load_csv``.
-    with patch("ai_aquatica.data_import.load_csv", return_value={"rows": 1}) as mock_load_csv:
+    # ``import_csv`` is a thin wrapper around ``ai_aquatica.io.loaders.load_csv``.
+    with patch("ai_aquatica.io.importers.load_csv", return_value={"rows": 1}) as mock_load_csv:
         result = aa.import_csv("dummy.csv")
         assert result == {"rows": 1}
         mock_load_csv.assert_called_once_with("dummy.csv")
 
     # ``plot_line`` delegates to the plotting backend – mock it to avoid real rendering.
     line_data = pd.DataFrame({"time": [0, 1], "value": [1.0, 2.0]})
-    with patch("ai_aquatica.visualization.plt", autospec=True) as mock_plt:
+    with patch("ai_aquatica.visualization.plots.plt", autospec=True) as mock_plt:
         aa.plot_line(line_data, "time", "value")
         mock_plt.figure.assert_called_once()
         mock_plt.plot.assert_called_once_with(line_data["time"], line_data["value"])
         mock_plt.show.assert_called_once()
 
     # ``train_linear_regression`` comes from the machine-learning helpers.
-    with patch("ai_aquatica.ai_ml_models.train_linear_regression", autospec=True) as mock_train:
+    with patch("ai_aquatica.modeling.classical.train_linear_regression", autospec=True) as mock_train:
         with patch.object(aa, "train_linear_regression", mock_train):
             aa.train_linear_regression([[0.0], [1.0]], [0, 1])
         mock_train.assert_called_once_with([[0.0], [1.0]], [0, 1])

@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
-from ai_aquatica.report_generation import (
+from ai_aquatica.reporting.legacy_reports import (
     generate_statistical_report,
     generate_interpretation_report,
     suggest_further_analysis,

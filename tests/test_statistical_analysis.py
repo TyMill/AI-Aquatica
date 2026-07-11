@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from ai_aquatica.statistical_analysis import (
+from ai_aquatica.analysis.statistics import (
     calculate_basic_statistics,
     calculate_correlation_matrix,
     perform_anova,

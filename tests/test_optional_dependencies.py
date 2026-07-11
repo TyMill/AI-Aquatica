@@ -8,7 +8,7 @@ import pandas as pd
 
 class TestOptionalDependencies(unittest.TestCase):
     def test_missing_data_without_tensorflow(self):
-        module_name = "ai_aquatica.missing_data"
+        module_name = "ai_aquatica.preprocessing.missing"
         sys.modules.pop(module_name, None)
 
         real_import = importlib.import_module
@@ -26,11 +26,11 @@ class TestOptionalDependencies(unittest.TestCase):
                 module.fill_missing_with_autoencoder(pd.DataFrame({"A": [1, None, 3]}))
 
         sys.modules.pop(module_name, None)
-        import ai_aquatica.missing_data as missing_data  # noqa: F401
+        import ai_aquatica.preprocessing.missing as missing_data  # noqa: F401
         importlib.reload(missing_data)
 
     def test_ai_ml_models_without_tensorflow(self):
-        module_name = "ai_aquatica.ai_ml_models"
+        module_name = "ai_aquatica.modeling.classical"
         sys.modules.pop(module_name, None)
 
         real_import = importlib.import_module
@@ -48,11 +48,11 @@ class TestOptionalDependencies(unittest.TestCase):
                 module.generate_synthetic_data(pd.DataFrame({"A": [1, 2, 3]}))
 
         sys.modules.pop(module_name, None)
-        import ai_aquatica.ai_ml_models as ai_ml_models  # noqa: F401
+        import ai_aquatica.modeling.classical as ai_ml_models  # noqa: F401
         importlib.reload(ai_ml_models)
 
     def test_visualization_without_plotly(self):
-        module_name = "ai_aquatica.visualization"
+        module_name = "ai_aquatica.visualization.plots"
         module = importlib.import_module(module_name)
 
         real_import = importlib.import_module

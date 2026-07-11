@@ -1,7 +1,7 @@
 """Utility wrappers for importing data into AI Aquatica projects.
 
 This module provides a stable, high-level API that delegates to the
-implementations in :mod:`ai_aquatica.data_loading`. The functions are kept
+implementations in :mod:`ai_aquatica.io.loaders`. The functions are kept
 very small so that tests – and downstream users – can rely on a predictable
 interface while the heavy lifting remains inside ``data_loading``.
 """
@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from ai_aquatica.data_loading import (
+from ai_aquatica.io.loaders import (
     load_csv,
     load_excel,
     load_json,
@@ -27,7 +27,7 @@ __all__ = [
 
 
 def import_csv(file_path: str):
-    """Load a CSV file via :func:`ai_aquatica.data_loading.load_csv`."""
+    """Load a CSV file via :func:`ai_aquatica.io.loaders.load_csv`."""
 
     return load_csv(file_path)
 

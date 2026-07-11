@@ -7,7 +7,7 @@ This guide demonstrates how to use the `data_loading` module to import data from
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.data_loading import (
+from ai_aquatica.io.loaders import (
     load_csv,
     load_excel,
     load_json,

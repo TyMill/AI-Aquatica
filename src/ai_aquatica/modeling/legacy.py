@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import builtins as _builtins
 
-from ai_aquatica.ai_ml_models import (
+from ai_aquatica.modeling.classical import (
     train_linear_regression,
     train_logistic_regression,
     train_classification_model,

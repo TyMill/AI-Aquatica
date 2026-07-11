@@ -59,8 +59,9 @@ def fill_missing_with_mode(data):
     try:
         data_filled = data.copy()
         for column in data.columns:
-            mode_value = data[column].mode()[0]
-            data_filled[column].fillna(mode_value, inplace=True)
+            mode_values = data[column].mode(dropna=True)
+            if not mode_values.empty:
+                data_filled[column] = data_filled[column].fillna(mode_values.iloc[0])
         return data_filled
     except Exception as e:
         print(f"Error filling missing values with mode: {e}")

@@ -7,7 +7,7 @@ This guide describes how to perform basic and advanced statistical analyses usin
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.statistical_analysis import (
+from ai_aquatica.analysis.statistics import (
     calculate_basic_statistics,
     plot_distribution,
     plot_boxplot,

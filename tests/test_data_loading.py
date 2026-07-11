@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from ai_aquatica.data_import import (
+from ai_aquatica.io.importers import (
     import_csv,
     import_excel,
     import_json,

@@ -7,7 +7,7 @@ This guide shows how to use the `report_generation` module to automatically gene
 ## 1. 📦 Importing
 
 ```python
-from ai_aquatica.report_generation import (
+from ai_aquatica.reporting.legacy_reports import (
     generate_statistical_report,
     generate_interpretation_report,
     suggest_further_analysis

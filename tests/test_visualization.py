@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from ai_aquatica.data_visualization import (
+from ai_aquatica.visualization import (
     plot_line,
     plot_bar,
     plot_pie,
