@@ -4,7 +4,8 @@
 [![Downloads](https://static.pepy.tech/badge/ai-aquatica)](https://pepy.tech/project/ai-aquatica)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://tymill.github.io/AI-Aquatica/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml/badge.svg)](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22133020.svg)](https://doi.org/10.5281/zenodo.22133020)
+
 
 **AI-Aquatica** is an open-source Python library for reproducible water-quality analysis with hydrochemical quality control, leakage-safe machine-learning validation, visualization, and standalone HTML reporting.
 
