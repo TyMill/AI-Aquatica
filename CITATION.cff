@@ -1,18 +1,24 @@
 cff-version: 1.2.0
-title: "AI-Aquatica: Reproducible machine-learning and hydrochemical analysis of water-quality data"
-message: "If you use AI-Aquatica in your research, please cite the archived software release and the SoftwareX article when available."
+title: "AI-Aquatica: Reproducible Machine Learning and Hydrochemical Analysis of Water-Quality Data"
+message: "If you use AI-Aquatica in your research, please cite this software release."
 type: software
-authors:
-  - family-names: Miller
-    given-names: Tymoteusz I.
-    orcid: "https://orcid.org/0000-0002-2514-5583"
-repository-code: "https://github.com/TyMill/AI-Aquatica"
-url: "https://tymill.github.io/AI-Aquatica/"
-license: MIT
 version: "2.3.0"
+license: "MIT"
+
+authors:
+  - family-names: "Miller"
+    given-names: "Tymoteusz I."
+    orcid: "https://orcid.org/0000-0002-2514-5583"
+
 keywords:
-  - water quality
-  - machine learning
-  - hydrochemistry
-  - environmental monitoring
-  - reproducible research
+  - "water quality"
+  - "hydrochemistry"
+  - "machine learning"
+  - "environmental monitoring"
+  - "reproducible research"
+
+abstract: >-
+  AI-Aquatica is an open-source Python library for reproducible
+  water-quality and hydrochemical analysis. It integrates hydrochemical
+  quality control, leakage-safe machine-learning workflows, grouped
+  validation, visualization, and self-contained reporting.
