@@ -1,19 +1,18 @@
 cff-version: 1.2.0
-title: "AI-Aquatica: AI-assisted analysis of water quality data"
-message: "If you use AI-Aquatica in your research, please cite the archived software release."
+title: "AI-Aquatica: Reproducible machine-learning and hydrochemical analysis of water-quality data"
+message: "If you use AI-Aquatica in your research, please cite the archived software release and the SoftwareX article when available."
 type: software
 authors:
   - family-names: Miller
-    given-names: Tymoteusz
+    given-names: Tymoteusz I.
     orcid: "https://orcid.org/0000-0002-2514-5583"
 repository-code: "https://github.com/TyMill/AI-Aquatica"
 url: "https://tymill.github.io/AI-Aquatica/"
-doi: "10.5281/zenodo.15096947"
 license: MIT
-version: "1.2.0"
+version: "2.3.0"
 keywords:
   - water quality
   - machine learning
   - hydrochemistry
   - environmental monitoring
-  - artificial intelligence
+  - reproducible research

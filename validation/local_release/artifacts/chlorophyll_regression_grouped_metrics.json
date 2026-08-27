@@ -1,0 +1,39 @@
+{
+  "r2": 0.19218169800990625,
+  "mae": 14.376824324324327,
+  "rmse": 17.888189552060613,
+  "r2_ci95_low": -0.013173884798316151,
+  "r2_ci95_high": 0.3520358161442407,
+  "mae_ci95_low": 12.654971846846845,
+  "mae_ci95_high": 16.331431306306307,
+  "rmse_ci95_low": 15.883617973698545,
+  "rmse_ci95_high": 20.168680852387315,
+  "confidence_interval_method": "cluster bootstrap by validation group",
+  "validation": "group_kfold",
+  "n_splits": 5,
+  "group_column": "month",
+  "n_samples_evaluated": 148,
+  "quality_policy": "warn",
+  "quality_status_column": "Ion_Balance_Status",
+  "quality_filter_applied": false,
+  "n_samples_before_quality_policy": 148,
+  "quality_status_available": true,
+  "quality_status_counts": {
+    "review": 104,
+    "acceptable": 44
+  },
+  "n_samples_not_accepted": 104,
+  "n_samples_after_quality_policy": 148,
+  "n_estimators": 300,
+  "random_state": 42,
+  "preprocessing": {
+    "imputation": "median",
+    "scaling": true,
+    "pca_in_model": false,
+    "pca_components": null,
+    "fit_scope": "training partition/fold only"
+  },
+  "baseline_r2": -0.013923570455867784,
+  "baseline_mae": 16.581993631562597,
+  "baseline_rmse": 20.040666162280946
+}

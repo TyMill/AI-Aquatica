@@ -2,21 +2,28 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "name": "AI-Aquatica",
-  "version": "1.2.0",
-  "description": "AI-assisted analysis of water quality data using data loading, cleaning, imputation, ion-balance checking, statistical analysis, machine learning, visualization, and report generation tools.",
+  "version": "2.3.0",
+  "dateModified": "2026-08-27",
+  "description": "Reproducible machine-learning and hydrochemical analysis of water-quality data, including regional CSV import, charge-balance quality control, leakage-safe validation, visualization, and HTML reporting.",
   "codeRepository": "https://github.com/TyMill/AI-Aquatica",
   "issueTracker": "https://github.com/TyMill/AI-Aquatica/issues",
   "license": "https://spdx.org/licenses/MIT",
   "programmingLanguage": "Python",
   "runtimePlatform": "Python >=3.9",
   "applicationCategory": "Environmental data science",
-  "keywords": ["water quality", "machine learning", "hydrochemistry", "environmental monitoring", "AI"],
+  "keywords": [
+    "water quality",
+    "machine learning",
+    "hydrochemistry",
+    "environmental monitoring",
+    "reproducible research"
+  ],
   "author": [
     {
       "@type": "Person",
-      "givenName": "Tymoteusz",
+      "givenName": "Tymoteusz I.",
       "familyName": "Miller",
-      "email": "me@tymoteuszmiller.dev",
+      "email": "tymoteusz.miller@usz.edu.pl",
       "affiliation": {
         "@type": "Organization",
         "name": "University of Szczecin"

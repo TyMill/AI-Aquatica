@@ -2,7 +2,11 @@ from pathlib import Path
 
 from ai_aquatica.core import WaterQualityPipeline
 from ai_aquatica.datasets import load_example_dataset
-from ai_aquatica.hydrochemistry import IonBalanceConfig, calculate_charge_balance, summarize_ion_balance
+from ai_aquatica.hydrochemistry import (
+    IonBalanceConfig,
+    calculate_charge_balance,
+    summarize_ion_balance,
+)
 from ai_aquatica.reporting import generate_water_quality_report
 
 
@@ -25,7 +29,7 @@ def test_professional_pipeline_generates_ion_balance_and_html_report(tmp_path):
         .impute()
         .scale()
         .pca(n_components=2)
-        .train_random_forest(task="classification")
+        .train_random_forest(task="classification", quality_policy="ignore")
     )
 
     assert "ion_balance" in pipeline.results

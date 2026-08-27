@@ -1,10 +1,13 @@
 import unittest
+
 import pandas as pd
+
 from ai_aquatica.hydrochemistry.legacy import (
     calculate_ion_balance,
-    identify_potential_errors,
     correct_ion_discrepancies,
+    identify_potential_errors,
 )
+
 
 class TestIonBalance(unittest.TestCase):
 

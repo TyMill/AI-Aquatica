@@ -204,6 +204,7 @@ def plot_interactive_bubble(
                 "Plotly is not installed. Install it with `pip install ai-aquatica[interactive]` "
                 "to enable interactive visualizations.",
                 RuntimeWarning,
+                stacklevel=2,
             )
             return None
 

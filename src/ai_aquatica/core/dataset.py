@@ -1,9 +1,9 @@
 """Core data container for AI-Aquatica workflows."""
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, Mapping, Sequence
 
 import pandas as pd
 
@@ -35,7 +35,7 @@ class WaterQualityDataset:
         auto_detect: bool = True,
         normalize_columns: bool = True,
         **kwargs,
-    ) -> "WaterQualityDataset":
+    ) -> WaterQualityDataset:
         """Load a CSV file using water-quality-friendly defaults.
 
         By default this method detects common European CSV conventions such as
@@ -55,10 +55,10 @@ class WaterQualityDataset:
         return cls(data)
 
     @classmethod
-    def from_excel(cls, path: str | Path, **kwargs) -> "WaterQualityDataset":
+    def from_excel(cls, path: str | Path, **kwargs) -> WaterQualityDataset:
         return cls(pd.read_excel(path, **kwargs))
 
-    def copy(self) -> "WaterQualityDataset":
+    def copy(self) -> WaterQualityDataset:
         return WaterQualityDataset(
             self.data.copy(),
             site_column=self.site_column,
@@ -94,7 +94,7 @@ class WaterQualityDataset:
         self.validate_columns(columns)
         return self.data.loc[:, columns]
 
-    def normalize_columns(self) -> "WaterQualityDataset":
+    def normalize_columns(self) -> WaterQualityDataset:
         """Normalize column names using water-quality domain aliases."""
 
         self.data = normalize_water_quality_columns(self.data)
@@ -106,7 +106,7 @@ class WaterQualityDataset:
         site_column: str | None = None,
         date_column: str | None = None,
         target_column: str | None = None,
-    ) -> "WaterQualityDataset":
+    ) -> WaterQualityDataset:
         for column in [site_column, date_column, target_column]:
             if column is not None:
                 self.validate_columns([column])

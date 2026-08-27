@@ -1,7 +1,16 @@
 import unittest
-import pandas as pd
+
 import numpy as np
-from ai_aquatica.preprocessing.transformations import normalize_data, standardize_data, log_transform, sqrt_transform, boxcox_transform
+import pandas as pd
+
+from ai_aquatica.preprocessing.transformations import (
+    boxcox_transform,
+    log_transform,
+    normalize_data,
+    sqrt_transform,
+    standardize_data,
+)
+
 
 class TestDataStandardization(unittest.TestCase):
 

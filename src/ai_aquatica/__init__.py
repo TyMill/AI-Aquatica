@@ -1,10 +1,11 @@
-"""AI-Aquatica: reproducible AI-assisted analysis of water-quality data."""
+"""AI-Aquatica: reproducible machine-learning and hydrochemical analysis."""
 from __future__ import annotations
 
 from .analysis import calculate_basic_statistics, calculate_correlation_matrix
 from .core import AnalysisResult, WaterQualityDataset, WaterQualityPipeline
 from .datasets import load_example_dataset, make_synthetic_water_quality
 from .hydrochemistry import (
+    NITROGEN_AS_N_MASS_PER_MEQ,
     IonBalanceConfig,
     add_bicarbonate_from_alkalinity,
     assess_ion_balance_inputs,
@@ -52,7 +53,7 @@ from .visualization import (
     plot_tsne,
 )
 
-__version__ = "2.2.0"
+__version__ = "2.3.0"
 
 __all__ = [
     "__version__",
@@ -60,6 +61,7 @@ __all__ = [
     "WaterQualityPipeline",
     "AnalysisResult",
     "IonBalanceConfig",
+    "NITROGEN_AS_N_MASS_PER_MEQ",
     "assess_ion_balance_inputs",
     "add_bicarbonate_from_alkalinity",
     "bicarbonate_from_alkalinity",

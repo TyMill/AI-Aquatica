@@ -1,11 +1,14 @@
 import unittest
+
 import pandas as pd
+
 from ai_aquatica.analysis.statistics import (
     calculate_basic_statistics,
     calculate_correlation_matrix,
+    decompose_time_series,
     perform_anova,
-    decompose_time_series
 )
+
 
 class TestStatisticalAnalysis(unittest.TestCase):
 
@@ -34,11 +37,12 @@ class TestStatisticalAnalysis(unittest.TestCase):
 
     def test_decompose_time_series(self):
         time_series_data = pd.DataFrame({
-            'Date': pd.date_range(start='1/1/2020', periods=12, freq='M'),
+            'Date': pd.date_range(start='1/1/2020', periods=12, freq='ME'),
             'Do': [8.1, 7.8, 8.2, 7.9, 8.0, 7.7, 7.6, 7.8, 7.9, 8.1, 8.0, 7.9]
         })
         time_series_data.set_index('Date', inplace=True)
-        decomposition = decompose_time_series(time_series_data, 'Do', model='additive', freq=12)
+        with self.assertWarns(UserWarning):
+            decomposition = decompose_time_series(time_series_data, 'Do', model='additive', freq=12)
         self.assertIsNotNone(decomposition)
 
 if __name__ == '__main__':

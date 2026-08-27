@@ -1,9 +1,12 @@
-import pandas as pd
-from jinja2 import Environment, FileSystemLoader
-import matplotlib.pyplot as plt
-import seaborn as sns
 import os
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from jinja2 import Environment, FileSystemLoader
+from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
+
 
 def _resolve_template_dir(template_dir: str = None) -> str:
     """Return the directory that contains the report templates."""
@@ -34,10 +37,12 @@ def generate_statistical_report(data, report_path='statistical_report.html', tem
         correlation_matrix = data.corr()
 
         # Generowanie wykresów
+        report_file = Path(report_path)
+        report_file.parent.mkdir(parents=True, exist_ok=True)
+        heatmap_file = report_file.parent / 'heatmap.png'
         plt.figure(figsize=(10, 6))
         sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
-        heatmap_path = 'heatmap.png'
-        plt.savefig(heatmap_path)
+        plt.savefig(heatmap_file)
         plt.close()
 
         # Szablon Jinja2
@@ -48,11 +53,11 @@ def generate_statistical_report(data, report_path='statistical_report.html', tem
         html_content = template.render(
             basic_stats=basic_stats.to_html(classes='table table-striped'),
             correlation_matrix=correlation_matrix.to_html(classes='table table-striped'),
-            heatmap_path=heatmap_path
+            heatmap_path=heatmap_file.name
         )
 
         # Zapis raportu
-        with open(report_path, 'w') as f:
+        with report_file.open('w', encoding='utf-8') as f:
             f.write(html_content)
         
         print(f"Report generated: {report_path}")

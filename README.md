@@ -2,12 +2,11 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/ai-aquatica?color=blue)](https://pypi.org/project/ai-aquatica/)
 [![Downloads](https://static.pepy.tech/badge/ai-aquatica)](https://pepy.tech/project/ai-aquatica)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15096947.svg)](https://doi.org/10.5281/zenodo.15096947)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://tymill.github.io/AI-Aquatica/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml/badge.svg)](https://github.com/TyMill/AI-Aquatica/actions/workflows/ci.yml)
 
-**AI-Aquatica** is an open-source Python library for reproducible water-quality analysis with statistical, hydrochemical, machine-learning, visualization and HTML-reporting tools.
+**AI-Aquatica** is an open-source Python library for reproducible water-quality analysis with hydrochemical quality control, leakage-safe machine-learning validation, visualization, and standalone HTML reporting.
 
 The project is designed for researchers, students and environmental analysts working with tabular datasets from rivers, lakes, reservoirs, coastal waters and urban aquatic systems. It provides both a backward-compatible functional API and a new publication-oriented pipeline API for complete workflows.
 
@@ -26,12 +25,12 @@ AI-Aquatica organizes these steps into a reusable Python package while keeping t
 - **Core workflow API**: `WaterQualityDataset`, `WaterQualityPipeline`, and typed result containers.
 - **Data import**: CSV, Excel, JSON, SQL, NoSQL and API helpers.
 - **Preprocessing**: missing-value handling, standardization, normalization and transformations.
-- **Hydrochemistry**: charge/ion balance diagnostics with `mg/L` to `meq/L` conversion and quality-control flags.
+- **Hydrochemistry**: explicit `mg/L` to `meq/L` conversion, charge-balance diagnostics, completeness checks, and `acceptable`, `review`, or `indeterminate` status.
 - **Exploratory analysis**: descriptive statistics, correlation analysis, ANOVA and time-series decomposition.
-- **Machine learning**: regression, classification, clustering, anomaly detection, PCA and optional deep-learning utilities.
+- **Machine learning**: leakage-safe Random Forest classification and regression with holdout, stratified, grouped, and temporal validation; classical exploratory utilities remain available separately.
 - **Visualization**: static exploratory plots and optional interactive Plotly charts.
 - **Reporting**: standalone HTML reports with dataset diagnostics, figures, model outputs and ion-balance summaries.
-- **Example data**: bundled deterministic synthetic water-quality dataset for tutorials and reproducibility checks.
+- **Reproducibility assets**: a bundled synthetic tutorial dataset and the real 148-observation dataset used by the SoftwareX workflow.
 
 ---
 
@@ -43,6 +42,7 @@ AI-Aquatica can load monitoring datasets exported as European CSV files with sem
 ```python
 from ai_aquatica.io import load_water_quality_csv
 from ai_aquatica.core import WaterQualityPipeline
+from ai_aquatica.hydrochemistry import NITROGEN_AS_N_MASS_PER_MEQ
 
 data = load_water_quality_csv("water_quality.csv")
 
@@ -55,11 +55,14 @@ pipeline = (
         alkalinity_col="Alkalinity",
         alkalinity_units="mg_CaCO3_L",
         threshold=10,
+        equivalent_weights=NITROGEN_AS_N_MASS_PER_MEQ,
     )
 )
 
 pipeline.export_html_report("ai_aquatica_report.html")
 ```
+
+The released real dataset reports NO3, NO2, and NH4 as mg N/L; the explicit mapping above converts that reporting basis correctly for charge balance.
 
 The HTML report contains dataset diagnostics, missingness, descriptive statistics, correlation structure and a hydrochemical ion-balance quality-control section.
 
@@ -73,7 +76,7 @@ Optional extras:
 
 ```bash
 pip install "ai-aquatica[interactive]"     # Plotly charts
-pip install "ai-aquatica[deep_learning]"   # TensorFlow utilities
+pip install "ai-aquatica[deep_learning]"   # optional experimental TensorFlow utilities (not used in the primary SoftwareX workflow)
 pip install "ai-aquatica[database]"        # SQL support
 pip install "ai-aquatica[nosql]"           # MongoDB support
 pip install "ai-aquatica[all]"             # all optional dependencies
@@ -118,14 +121,21 @@ pipeline = (
         units="mg/L",
         threshold=5.0,
     )
-    .select_features(features, target="water_quality_class")
+    .select_features(features=features, target="water_quality_class")
     .impute(strategy="median")
     .scale()
-    .pca(n_components=2)
-    .train_random_forest(task="classification")
+    .pca(n_components=2, use_for_model=False)
+    .train_random_forest(
+        task="classification",
+        validation="group_kfold",
+        group_column="site",
+        n_splits=4,
+        quality_policy="warn",
+    )
 )
 
-pipeline.export_html_report("ai_aquatica_report.html")
+pipeline.export_artifacts("outputs/artifacts")
+pipeline.export_html_report("outputs/ai_aquatica_report.html")
 ```
 
 Run the full SoftwareX-style reproducibility example:
@@ -143,6 +153,19 @@ outputs/softwarex_example/processed_water_quality.csv
 ```
 
 ---
+
+
+## Reproducible real-dataset validation
+
+The complete manuscript workflow is executed by one command:
+
+```bash
+python examples/real_dataset_workflow.py --output validation/real_dataset --bootstrap 1000
+```
+
+The workflow fits imputation, scaling, and any predictive PCA **only inside each training partition or validation fold**. It exports campaign-grouped station classification, a QC-filtered sensitivity analysis, chlorophyll-a regression against a mean baseline, fold metrics, out-of-sample predictions, 95% bootstrap confidence intervals, confusion matrices, an observed-versus-predicted plot, hydrochemical diagnostics, and a standalone HTML report.
+
+Hydrochemical status can control model training through `quality_policy="warn"`, `"filter"`, `"raise"`, or `"ignore"`.
 
 ## Hydrochemical ion balance
 
@@ -164,7 +187,7 @@ checked = calculate_charge_balance(water, config)
 print(checked[["Ion_Balance", "Potential_Error", "Ion_Balance_Status"]].head())
 ```
 
-The module converts mg/L concentrations to milliequivalents per litre using an equivalent-weight catalogue and reports charge-balance error in percent. Diagnostic correction utilities are provided for sensitivity analysis; they should not replace laboratory quality-control procedures.
+The module converts mg/L concentrations to milliequivalents per litre using an explicit equivalent-weight catalogue and reports charge-balance error in percent. Rows with missing, non-numeric, infinite, negative, or zero-total selected ions are marked `indeterminate`; they are never assigned an artificial 0% error. Diagnostic correction utilities are provided only for sensitivity analysis and must not replace laboratory quality-control procedures.
 
 ---
 
@@ -206,6 +229,8 @@ This repository includes publication-oriented metadata and reproducibility asset
 - `CONTRIBUTING.md`
 - `CHANGELOG.md`
 - `docs/softwarex_reproducibility.md`
+- `docs/release_checklist.md`
+- `requirements-validation.txt` (reference Python 3.13 reproducibility environment)
 - `docs/softwarex_architecture.md`
 - `examples/softwarex_full_workflow.py`
 - bundled example dataset in `src/ai_aquatica/datasets/data/`
@@ -215,7 +240,8 @@ Validation commands:
 
 ```bash
 python -m pip install -e ".[testing,interactive]"
-python -m pytest
+python -m ruff check .
+python -m pytest --cov=ai_aquatica --cov-report=term-missing --cov-fail-under=70
 python -m compileall src/ai_aquatica examples
 python examples/softwarex_full_workflow.py
 python examples/real_dataset_workflow.py --output outputs/real_dataset
@@ -224,10 +250,10 @@ python examples/real_dataset_workflow.py --output outputs/real_dataset
 Current validation status for the SoftwareX-preparation branch:
 
 ```text
-61 passed, 1 skipped, 3 subtests passed
+76 passed, 1 skipped; 72% whole-package coverage in the reference validation environment (core pipeline 79%, hydrochemistry 82%, HTML reporting 95%)
 ```
 
-The skipped test concerns TensorFlow-based imputation when TensorFlow is not installed. TensorFlow is an optional dependency.
+The skipped test concerns TensorFlow-based imputation when TensorFlow is not installed. TensorFlow is optional and is not used by the primary SoftwareX workflow. Continuous integration tests Python 3.9–3.13 on Ubuntu and runs smoke tests on Ubuntu, Windows, and macOS.
 
 ---
 

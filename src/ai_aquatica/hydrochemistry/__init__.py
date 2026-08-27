@@ -2,6 +2,7 @@
 
 from .ion_balance import (
     DEFAULT_EQUIVALENT_WEIGHTS,
+    NITROGEN_AS_N_MASS_PER_MEQ,
     IonBalanceConfig,
     IonBalanceSummary,
     add_bicarbonate_from_alkalinity,
@@ -16,6 +17,7 @@ from .ion_balance import (
 
 __all__ = [
     "DEFAULT_EQUIVALENT_WEIGHTS",
+    "NITROGEN_AS_N_MASS_PER_MEQ",
     "IonBalanceConfig",
     "IonBalanceSummary",
     "add_bicarbonate_from_alkalinity",

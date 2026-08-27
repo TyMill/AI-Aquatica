@@ -8,10 +8,6 @@ Outputs are written to ``outputs/softwarex_example/``.
 from __future__ import annotations
 
 from pathlib import Path
-import sys
-
-# Allow running this example directly from a source checkout without installation.
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from ai_aquatica.core import WaterQualityPipeline
 from ai_aquatica.datasets import load_example_dataset

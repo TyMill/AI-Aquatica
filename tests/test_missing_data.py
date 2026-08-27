@@ -1,14 +1,17 @@
 import unittest
+
 import pandas as pd
+
 from ai_aquatica.preprocessing.missing import (
+    TENSORFLOW_AVAILABLE,
+    fill_missing_with_autoencoder,
+    fill_missing_with_knn,
     fill_missing_with_mean,
     fill_missing_with_median,
     fill_missing_with_mode,
-    fill_missing_with_knn,
     fill_missing_with_regression,
-    fill_missing_with_autoencoder,
-    TENSORFLOW_AVAILABLE,
 )
+
 
 class TestMissingData(unittest.TestCase):
 

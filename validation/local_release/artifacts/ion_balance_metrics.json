@@ -1,0 +1,73 @@
+{
+  "n_samples": 148,
+  "n_evaluable": 148,
+  "n_indeterminate": 0,
+  "n_flagged": 104,
+  "threshold": 10.0,
+  "mean_abs_error": 17.31269616711596,
+  "median_abs_error": 16.203665073255166,
+  "max_abs_error": 46.17832916776847,
+  "alkalinity_col": "Alkalinity",
+  "alkalinity_units": "mg_CaCO3_L",
+  "bicarbonate_col": "HCO3",
+  "units": "mg/L",
+  "conversion_overrides_mg_per_meq": {
+    "NH4": 14.0067,
+    "NO2": 14.0067,
+    "NO3": 14.0067
+  },
+  "input_readiness": {
+    "requested_columns": [
+      "Ca",
+      "Mg",
+      "NH4",
+      "Cl",
+      "SO4",
+      "NO3",
+      "NO2",
+      "HCO3",
+      "Alkalinity"
+    ],
+    "available_columns": [
+      "Ca",
+      "Mg",
+      "NH4",
+      "Cl",
+      "SO4",
+      "NO3",
+      "NO2",
+      "Alkalinity",
+      "HCO3 (derived from alkalinity)"
+    ],
+    "missing_columns": [],
+    "expected_major_ions": [
+      "Ca",
+      "Cl",
+      "HCO3",
+      "K",
+      "Mg",
+      "Na",
+      "SO4"
+    ],
+    "present_major_ions": [
+      "Ca",
+      "Cl",
+      "Mg",
+      "SO4",
+      "HCO3 (derived from alkalinity)"
+    ],
+    "missing_major_ions": [
+      "K",
+      "Na"
+    ],
+    "column_readiness_score": 1.0,
+    "readiness_score": 1.0,
+    "complete_row_fraction_for_available_requested_columns": 1.0,
+    "negative_value_count": 0,
+    "infinite_value_count": 0,
+    "notes": [
+      "The dataset lacks one or more common major ions; charge-balance results must be interpreted as diagnostics of the available ion set.",
+      "Bicarbonate is derived from alkalinity; alkalinity units must be verified before interpretation."
+    ]
+  }
+}

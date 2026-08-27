@@ -1,0 +1,23 @@
+Variable,Analytical method,Reference standard / basis,Unit
+Temperature,Direct thermometric measurement,Calibrated instrument procedure,°C
+pH,Potentiometric measurement,EN ISO 10523:2008,dimensionless
+Redox potential,Potentiometric electrode measurement,Calibrated instrument procedure,mV
+Dissolved oxygen,Electrochemical probe method,EN ISO 5814:2012,mg O2/L
+COD-Mn,Permanganate index,EN ISO 8467:1993,mg O2/L
+COD-Cr,Small-scale sealed-cuvette dichromate method,EN ISO 15705:2002,mg O2/L
+BOD5,Five-day biochemical oxygen demand,EN ISO 5815-1:2019,mg O2/L
+Nitrate,Laboratory titrimetric determination,Validated laboratory procedure,mg N/L
+Nitrite,Molecular absorption spectrometry,EN ISO 6777:1984,mg N/L
+Ammonium,Nessler-reagent spectrophotometric method,Validated laboratory procedure,mg N/L
+Total nitrogen,Oxidative digestion and spectrometric determination,EN ISO 11905-1:1997,mg N/L
+Soluble reactive phosphorus,Molybdate spectrometric method,EN ISO 6878:2004,mg P/L
+Total phosphorus,Digestion followed by molybdate spectrometric method,EN ISO 6878:2004,mg P/L
+Chloride,Silver-nitrate titration (Mohr method),EN ISO 9297:1989,mg/L
+Sulfate,Laboratory titrimetric determination,Validated laboratory procedure,mg/L
+Total hardness,Complexometric titration,EN ISO 6059:1984,mg CaCO3/L
+Calcium and magnesium,Titrimetric determination,Relevant validated titrimetric procedures,mg/L
+Alkalinity,Acid titration,EN ISO 9963-1:1994,mg CaCO3/L
+Acidity,Base titration,Validated laboratory procedure,mg CaCO3/L
+"Fe, Mn, Zn, Cu, Pb, Cd",Atomic absorption spectrometry (AAS),ISO 8288:1986 and element-specific validated AAS procedures,mg/L
+Chlorophyll-a,Pigment extraction and spectrophotometry,ISO 10260:1992,µg/L
+Secchi transparency,Secchi disk measurement,Field monitoring procedure,cm

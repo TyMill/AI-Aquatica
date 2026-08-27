@@ -1,7 +1,10 @@
 import pandas as pd
 
 from ai_aquatica.core import WaterQualityPipeline
-from ai_aquatica.hydrochemistry import add_bicarbonate_from_alkalinity, calculate_charge_balance_from_alkalinity
+from ai_aquatica.hydrochemistry import (
+    add_bicarbonate_from_alkalinity,
+    calculate_charge_balance_from_alkalinity,
+)
 
 
 def test_add_bicarbonate_from_alkalinity():

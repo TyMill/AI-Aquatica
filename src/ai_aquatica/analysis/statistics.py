@@ -1,13 +1,11 @@
 import warnings
 
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
-from scipy import stats
-from statsmodels.tsa.seasonal import seasonal_decompose
-from statsmodels.formula.api import ols
 import statsmodels.api as sm
+from statsmodels.formula.api import ols
+from statsmodels.tsa.seasonal import seasonal_decompose
 
 # Podstawowe Statystyki
 
@@ -152,6 +150,7 @@ def decompose_time_series(data, column, model='additive', freq=None):
                     "Provided period is too large for the available data. "
                     f"Falling back to period={fallback}.",
                     UserWarning,
+                    stacklevel=2,
                 )
             period = fallback
 

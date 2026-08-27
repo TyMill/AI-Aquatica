@@ -1,5 +1,6 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
+
 
 def remove_duplicates(data):
     """Remove duplicate observations while preserving the original order.

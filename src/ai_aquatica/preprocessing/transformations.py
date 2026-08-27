@@ -1,6 +1,7 @@
-import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+
 
 def normalize_data(data):
     """

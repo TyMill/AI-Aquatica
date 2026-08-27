@@ -77,12 +77,16 @@ def load_json(file_path: str, **kwargs: Any) -> pd.DataFrame | None:
 def load_sql(sql_query: str, db_path: str) -> pd.DataFrame | None:
     """Execute a SQL query against an SQLite database."""
 
+    conn = None
     try:
-        with sqlite3.connect(db_path) as conn:
-            return pd.read_sql_query(sql_query, conn)
+        conn = sqlite3.connect(db_path)
+        return pd.read_sql_query(sql_query, conn)
     except Exception as exc:
         print(f"Error loading data from SQLite database: {exc}")
         return None
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 def load_mongo(

@@ -1,0 +1,4 @@
+analysis,validation,n_samples,quality_policy,accuracy,balanced_accuracy,precision_macro,recall_macro,f1_macro,f1_weighted,r2,mae,rmse,baseline_r2,baseline_mae,baseline_rmse
+station_classification_grouped,group_kfold,148,warn,0.9324324324324325,0.9324324324324325,0.9340544871794871,0.9324324324324325,0.9315915777586259,0.9315915777586257,,,,,,
+station_classification_qc_filtered,group_kfold,44,filter,0.9318181818181818,0.75,0.7041666666666666,0.75,0.7259725400457666,0.8994175161223216,,,,,,
+chlorophyll_regression_grouped,group_kfold,148,warn,,,,,,,0.19218169800990625,14.376824324324327,17.888189552060613,-0.013923570455867784,16.581993631562597,20.040666162280946

@@ -1,15 +1,18 @@
 import unittest
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
+
 from ai_aquatica.modeling import (
-    train_linear_regression,
-    train_logistic_regression,
-    train_classification_model,
+    detect_anomalies,
     evaluate_classification_model,
     perform_clustering,
-    detect_anomalies
+    train_classification_model,
+    train_linear_regression,
+    train_logistic_regression,
 )
+
 
 class TestMLAnalysis(unittest.TestCase):
 

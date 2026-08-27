@@ -18,14 +18,14 @@ class AnalysisResult:
     figures: dict[str, Any] = field(default_factory=dict)
     artifacts: dict[str, Path] = field(default_factory=dict)
 
-    def add_table(self, key: str, table: pd.DataFrame) -> "AnalysisResult":
+    def add_table(self, key: str, table: pd.DataFrame) -> AnalysisResult:
         self.tables[key] = table
         return self
 
-    def add_metric(self, key: str, value: Any) -> "AnalysisResult":
+    def add_metric(self, key: str, value: Any) -> AnalysisResult:
         self.metrics[key] = value
         return self
 
-    def add_figure(self, key: str, figure: Any) -> "AnalysisResult":
+    def add_figure(self, key: str, figure: Any) -> AnalysisResult:
         self.figures[key] = figure
         return self

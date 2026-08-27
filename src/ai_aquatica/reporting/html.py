@@ -4,10 +4,11 @@ from __future__ import annotations
 import base64
 import html
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
-from typing import Mapping, Any
+from typing import Any
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -91,6 +92,7 @@ def _hydrochemistry_section(data: pd.DataFrame) -> str:
         "median_abs_charge_balance_error_pct": float(errors.abs().median()) if errors.notna().any() else float("nan"),
         "max_abs_charge_balance_error_pct": float(errors.abs().max()) if errors.notna().any() else float("nan"),
         "flagged_samples": int((data["Ion_Balance_Status"].astype(str) == "review").sum()),
+        "indeterminate_samples": int((data["Ion_Balance_Status"].astype(str) == "indeterminate").sum()),
     }
     figure_html = ""
     if errors.notna().any():
@@ -146,18 +148,30 @@ def generate_water_quality_report(
     for name, result in (results or {}).items():
         metrics = getattr(result, "metrics", {}) or {}
         tables = getattr(result, "tables", {}) or {}
+        figures = getattr(result, "figures", {}) or {}
         table_blocks = []
         for table_name, table in tables.items():
             if isinstance(table, pd.DataFrame):
                 table_blocks.append(
                     f"<h4>{html.escape(str(table_name))}</h4>" + _safe_table(table.head(50))
                 )
+        figure_blocks = []
+        for figure_name, figure in figures.items():
+            try:
+                encoded = _fig_to_base64(figure)
+            except Exception:
+                continue
+            figure_blocks.append(
+                f'<h4>{html.escape(str(figure_name).replace("_", " ").title())}</h4>'
+                f'<img class="figure" alt="{html.escape(str(figure_name))}" src="data:image/png;base64,{encoded}">'
+            )
         result_sections.append(
             f"""
             <section class="card">
               <h3>{html.escape(str(name).replace('_', ' ').title())}</h3>
               <h4>Metrics</h4>
               {_metrics_html(metrics)}
+              {''.join(figure_blocks)}
               {''.join(table_blocks)}
             </section>
             """

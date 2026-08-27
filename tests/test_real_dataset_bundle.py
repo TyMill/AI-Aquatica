@@ -19,3 +19,11 @@ def test_bundled_real_dataset_can_be_loaded():
     assert "Station" in data.columns
     assert "Alkalinity" in data.columns
     assert "Chl_a" in data.columns
+
+
+def test_bundled_real_dataset_contains_confirmed_ph_correction():
+    repo_root = Path(__file__).resolve().parents[1]
+    data_path = repo_root / "examples" / "data" / "water_quality.csv"
+    data = normalize_water_quality_columns(load_water_quality_csv(data_path))
+    row = data.loc[(data["Station"] == "r2") & (data["month"] == 27)].iloc[0]
+    assert row["pH"] == 7.49

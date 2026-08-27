@@ -5,8 +5,8 @@ from __future__ import annotations
 import argparse
 import inspect
 import sys
+from collections.abc import Iterable
 from importlib import metadata
-from typing import Iterable, Tuple
 
 
 def _get_version() -> str:
@@ -18,7 +18,7 @@ def _get_version() -> str:
         return "unknown"
 
 
-def _collect_public_api() -> Tuple[Iterable[str], Iterable[Tuple[str, str]]]:
+def _collect_public_api() -> tuple[Iterable[str], Iterable[tuple[str, str]]]:
     """Collect modules and callables exported via :data:`ai_aquatica.__all__`."""
 
     import ai_aquatica
@@ -38,7 +38,7 @@ def _collect_public_api() -> Tuple[Iterable[str], Iterable[Tuple[str, str]]]:
     return modules, callables
 
 
-def _describe_symbol(symbol: str) -> Tuple[str, str]:
+def _describe_symbol(symbol: str) -> tuple[str, str]:
     """Return the first line of the docstring for a public symbol."""
 
     import ai_aquatica

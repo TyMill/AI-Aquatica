@@ -7,14 +7,14 @@ interface while the heavy lifting remains inside ``data_loading``.
 """
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from ai_aquatica.io.loaders import (
     load_csv,
     load_excel,
     load_json,
-    load_sql,
     load_mongo,
+    load_sql,
 )
 
 __all__ = [
@@ -53,12 +53,12 @@ def import_from_sql(db_path: str, query: str):
 def import_from_nosql(
     collection_name: str,
     db_name: str,
-    query: Dict[str, Any] | None = None,
+    query: dict[str, Any] | None = None,
     mongo_uri: str = "mongodb://localhost:27017/",
 ):
     """Proxy to :func:`load_mongo` for MongoDB collections."""
 
-    actual_query: Dict[str, Any] = query or {}
+    actual_query: dict[str, Any] = query or {}
     return load_mongo(
         collection_name=collection_name,
         db_name=db_name,

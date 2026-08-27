@@ -1,16 +1,19 @@
 import unittest
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+
 from ai_aquatica.visualization import (
-    plot_line,
     plot_bar,
+    plot_heatmap,
+    plot_interactive_bubble,
+    plot_line,
+    plot_pca,
     plot_pie,
     plot_scatter,
-    plot_heatmap,
-    plot_pca,
     plot_tsne,
-    plot_interactive_bubble
 )
+
 
 class TestDataVisualization(unittest.TestCase):
 

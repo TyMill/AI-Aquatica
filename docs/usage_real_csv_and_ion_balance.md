@@ -5,6 +5,7 @@ AI-Aquatica includes robust helpers for environmental monitoring datasets export
 ```python
 from ai_aquatica.io import load_water_quality_csv
 from ai_aquatica.core import WaterQualityPipeline
+from ai_aquatica.hydrochemistry import NITROGEN_AS_N_MASS_PER_MEQ
 
 # Detects separator, decimal convention and encoding automatically.
 data = load_water_quality_csv("water_quality.csv")
@@ -18,11 +19,14 @@ pipeline = (
         alkalinity_col="Alkalinity",
         alkalinity_units="mg_CaCO3_L",
         threshold=10,
+        equivalent_weights=NITROGEN_AS_N_MASS_PER_MEQ,
     )
 )
 
 pipeline.export_html_report("ai_aquatica_report.html")
 ```
+
+In the released SoftwareX dataset, NO3, NO2, and NH4 are reported as mg N/L, so the explicit nitrogen reporting-basis conversion mapping is required.
 
 The method `ion_balance_from_alkalinity()` derives HCO3 from alkalinity, calculates the charge-balance error and adds diagnostic columns:
 

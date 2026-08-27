@@ -1,5 +1,31 @@
 # Changelog
 
+## v2.3.0 - SoftwareX major-revision release
+
+- Explicitly enable scikit-learn's experimental `IterativeImputer` before import for clean compatibility with the pinned validation environment.
+- Removed source-path import hacks from examples; examples now run against the installed package, matching CI and release usage.
+- Updated the legacy tutorial classifier so supervised imputation/scaling are fitted only inside the training partition.
+- Keep legacy report heatmap files beside the requested report path instead of writing into the repository root.
+
+- Added Ruff to the testing extra and CI release lint gate.
+- Modernized Python 3.9+ type annotations and warning stack levels for clean Ruff validation.
+- Cleaned source-checkout example import handling and release metadata instructions.
+
+- Eliminated preprocessing leakage by fitting imputation, scaling, and optional PCA only inside training partitions or validation folds.
+- Added holdout, stratified K-fold, campaign-grouped K-fold, and temporal holdout validation.
+- Added per-class precision, recall and F1, confusion matrices, fold-level metrics, out-of-sample predictions, group-aware bootstrap 95% confidence intervals, and regression baselines.
+- Added RMSE, MAE and R² for regression, plus observed-versus-predicted figures.
+- Added hydrochemical safeguards: incomplete, non-numeric, infinite, negative, or zero-total ion sets are now marked `indeterminate` rather than `acceptable`.
+- Added explicit `warn`, `filter`, `raise`, and `ignore` quality policies linking hydrochemical QC to predictive modelling.
+- Added `features=` as an API alias and `pipeline.data` for manuscript/API consistency.
+- Added a single executable workflow that reproduces hydrochemical diagnostics, grouped station classification, QC-filtered sensitivity analysis, chlorophyll-a regression, tables, figures, and HTML reporting.
+- Added artifact export for metrics, predictions, fold results, feature importance tables and figures.
+- Expanded the test suite to 76 passed tests plus one optional TensorFlow skip, including CLI and grouped-validation safeguards.
+- Added multi-version and multi-operating-system CI, coverage reporting, package building, and workflow smoke tests.
+- Synchronized package, citation and CodeMeta version metadata at v2.3.0.
+- Corrected the confirmed source-data transcription error for Lake Słoneczne (`r2`), campaign 27, from pH 14.9 to pH 7.49.
+- Documented that NO3, NO2 and NH4 in the SoftwareX dataset are reported as mg N/L and added an explicit nitrogen-as-N mass-per-meq conversion mapping for charge-balance calculations.
+
 ## v2.2.0 - Real-dataset hardening release
 
 - Added robust water-quality CSV loader with automatic separator, decimal and encoding detection.

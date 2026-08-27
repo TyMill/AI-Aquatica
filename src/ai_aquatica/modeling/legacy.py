@@ -3,17 +3,18 @@ from __future__ import annotations
 
 import builtins as _builtins
 
+from sklearn.model_selection import train_test_split as _train_test_split
+
 from ai_aquatica.modeling.classical import (
-    train_linear_regression,
-    train_logistic_regression,
-    train_classification_model,
+    detect_anomalies,
     evaluate_classification_model,
+    generate_synthetic_data,
     perform_clustering,
     plot_clusters,
-    detect_anomalies,
-    generate_synthetic_data,
+    train_classification_model,
+    train_linear_regression,
+    train_logistic_regression,
 )
-from sklearn.model_selection import train_test_split as _train_test_split
 
 __all__ = [
     "train_linear_regression",

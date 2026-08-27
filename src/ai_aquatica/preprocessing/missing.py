@@ -1,11 +1,9 @@
 import importlib
 
 import pandas as pd
-import numpy as np
-from sklearn.impute import KNNImputer
+from sklearn.experimental import enable_iterative_imputer  # noqa: F401
+from sklearn.impute import IterativeImputer, KNNImputer
 from sklearn.linear_model import LinearRegression
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
 
 try:  # pragma: no cover - exercised via dedicated tests
     tf = importlib.import_module("tensorflow")

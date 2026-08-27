@@ -1,0 +1,5 @@
+{
+  "strategy": "median",
+  "fit_scope": "training partition/fold only",
+  "leakage_safe": true
+}

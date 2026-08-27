@@ -2,25 +2,16 @@
 from __future__ import annotations
 
 from pathlib import Path
-import sys
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
-from ai_aquatica.modeling.classical import (
-    detect_anomalies,
-    evaluate_classification_model,
-    train_classification_model,
-)
-from ai_aquatica.preprocessing.cleaning import remove_duplicates
-from ai_aquatica.preprocessing.transformations import standardize_data
+from ai_aquatica.core import WaterQualityPipeline
 from ai_aquatica.hydrochemistry.legacy import calculate_ion_balance, identify_potential_errors
+from ai_aquatica.modeling.classical import detect_anomalies
+from ai_aquatica.preprocessing.cleaning import remove_duplicates
 from ai_aquatica.preprocessing.missing import fill_missing_with_median
+from ai_aquatica.preprocessing.transformations import standardize_data
 from ai_aquatica.reporting.legacy_reports import generate_statistical_report
 
 
@@ -54,7 +45,6 @@ def main() -> None:
     output_dir.mkdir(exist_ok=True)
 
     data = remove_duplicates(build_demo_dataset())
-    data = fill_missing_with_median(data)
 
     feature_columns = [
         "pH",
@@ -63,20 +53,31 @@ def main() -> None:
         "nitrate_mg_l",
         "phosphate_mg_l",
     ]
-    X = standardize_data(data[feature_columns])
-    y = data["quality_alert"]
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.25,
-        random_state=42,
-        stratify=y,
+    # Predictive preprocessing is registered on the AI-Aquatica pipeline and is
+    # fitted only inside the training partition; the held-out data never
+    # influence imputation or scaling parameters.
+    ml_pipeline = (
+        WaterQualityPipeline.from_dataframe(data)
+        .select_features(features=feature_columns, target="quality_alert")
+        .impute(strategy="median")
+        .scale()
+        .train_random_forest(
+            task="classification",
+            validation="holdout",
+            test_size=0.25,
+            random_state=42,
+            quality_policy="ignore",
+            bootstrap_iterations=200,
+        )
     )
-    model = train_classification_model(X_train, y_train, model_type="random_forest")
-    metrics = evaluate_classification_model(model, X_test, y_test)
+    metrics = ml_pipeline.results["random_forest"].metrics
 
-    anomaly_labels = detect_anomalies(X, method="isolation_forest")
+    # The following preprocessing is used only for exploratory anomaly
+    # detection and is not part of the supervised performance estimate above.
+    exploratory = fill_missing_with_median(data[feature_columns])
+    exploratory = standardize_data(exploratory)
+    anomaly_labels = detect_anomalies(exploratory, method="isolation_forest")
     ion_balance = calculate_ion_balance(
         data,
         cations=["calcium_meq_l", "magnesium_meq_l"],
@@ -87,7 +88,7 @@ def main() -> None:
     generate_statistical_report(data, report_path=output_dir / "statistical_report.html")
 
     print("AI-Aquatica demo completed")
-    print(f"F1 score: {metrics.get('f1_score'):.3f}")
+    print(f"Weighted F1 score: {metrics.get('f1_weighted'):.3f}")
     print(f"Detected anomalies: {(anomaly_labels == -1).sum()}")
     print(f"Ion-balance warnings: {len(ion_warnings)}")
     print(f"Report: {output_dir / 'statistical_report.html'}")
